@@ -1,0 +1,10 @@
+graph LR
+  A["Customer pays ₹1,499"] -->|"1 checkout"| B["Backend API"]
+  B -->|"2 webhook"| C{{"You approve"}}
+  C --> D["Shipped to customer"]
+  classDef auto fill:#E0F2FE,stroke:#0284C7,color:#0C1A2B
+  classDef human fill:#FEF3C7,stroke:#D97706,stroke-width:2px,color:#1F1300
+  classDef done fill:#DCFCE7,stroke:#16A34A,color:#052E16
+  class A,B auto
+  class C human
+  class D done

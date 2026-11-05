@@ -1,0 +1,69 @@
+{
+  "title": "Payment-link orders",
+  "subtitle": "What the session built, and what still needs you",
+  "model_id": "eleven_multilingual_v2",
+  "graph": {
+    "nodes": [
+      {"id": "you", "title": "You", "sub": "run the command", "status": "human"},
+      {"id": "cli", "title": "shop paylink", "sub": "new CLI command", "status": "done"},
+      {"id": "api", "title": "Backend API", "sub": "makes the order", "status": "auto"},
+      {"id": "pay", "title": "Stripe", "sub": "payment link", "status": "auto"},
+      {"id": "hook", "title": "Webhook", "sub": "marks order paid", "status": "verified"},
+      {"id": "slack", "title": "Slack", "sub": "unmatched payments", "status": "unverified"}
+    ],
+    "edges": [
+      {"id": "you-cli", "from": "you", "to": "cli", "label": "create"},
+      {"id": "cli-api", "from": "cli", "to": "api", "label": "order first"},
+      {"id": "api-pay", "from": "api", "to": "pay", "label": "make link"},
+      {"id": "pay-hook", "from": "pay", "to": "hook", "label": "checkout.completed"},
+      {"id": "hook-slack", "from": "hook", "to": "slack", "label": "no match"}
+    ]
+  },
+  "scenes": [
+    {"id": "s0", "type": "title", "chip": "Explainer", "lines": [
+      {"say": "This session added payment links for orders."},
+      {"say": "Here is what it built, and what still needs you."}
+    ]},
+    {"id": "s1", "type": "map", "chip": "The parts", "lines": [
+      {"say": "You run one new command.", "cue": {"nodes": ["you", "cli"], "edges": ["you-cli"]}},
+      {"say": "The backend makes the order first, then asks Stripe for a link.", "cue": {"nodes": ["api", "pay"], "edges": ["cli-api", "api-pay"]}},
+      {"say": "When the customer pays, the webhook marks the order paid.", "cue": {"nodes": ["hook"], "edges": ["pay-hook"]}},
+      {"say": "If no order matches, the payment goes to Slack for a person.", "cue": {"nodes": ["slack"], "edges": ["hook-slack"]}}
+    ]},
+    {"id": "s2", "type": "steps", "chip": "What was done", "items": [
+      {"text": "Wrote the shop paylink command", "status": "done"},
+      {"text": "Stored add-ons on the order", "status": "verified"},
+      {"text": "Posted unmatched payments to Slack", "status": "unverified"},
+      {"text": "Ran a small live payment", "status": "todo"}
+    ], "lines": [
+      {"say": "First, it wrote the new command.", "cue": {"reveal": 1}},
+      {"say": "Then it stored add-ons on the order. Tests pass for this.", "cue": {"reveal": 2}},
+      {"say": "It also posts unmatched payments to Slack, but nobody tested that yet.", "cue": {"reveal": 3}},
+      {"say": "A small live payment was not run.", "cue": {"reveal": 4}}
+    ]},
+    {"id": "s3", "type": "before_after", "chip": "What changed", "pairs": [
+      {"before": "Orders only from the website", "after": "Orders from a payment link too"},
+      {"before": "No add-ons on orders", "after": "Add-ons saved on the order"}
+    ], "lines": [
+      {"say": "Before, orders came only from the website. Now a payment link can make one.", "cue": {"reveal": 1}},
+      {"say": "And add-ons are now saved on the order.", "cue": {"reveal": 2}}
+    ]},
+    {"id": "s4", "type": "numbers", "chip": "Results", "stats": [
+      {"label": "Tests passed", "value": "14"},
+      {"label": "Files changed", "value": "6"},
+      {"label": "Live payments run", "value": "0"}
+    ], "lines": [
+      {"say": "Fourteen tests pass.", "cue": {"reveal": 1}},
+      {"say": "Six files changed.", "cue": {"reveal": 2}},
+      {"say": "And zero live payments were run.", "cue": {"reveal": 3}}
+    ]},
+    {"id": "s5", "type": "takeaways", "chip": "Needs you", "mini_map": true, "cards": [
+      {"title": "Run one live payment link", "sub": "one dollar, then refund", "status": "human"},
+      {"title": "Check the Slack alert", "sub": "not tested yet", "status": "unverified"}
+    ], "lines": [
+      {"say": "Two things need you.", "cue": {"reveal": 1}},
+      {"say": "One. Run one live payment link for one dollar.", "cue": {"reveal": 1, "nodes": ["you", "cli"]}},
+      {"say": "Two. Check that the Slack alert really arrives.", "cue": {"reveal": 2, "nodes": ["slack"]}}
+    ]}
+  ]
+}

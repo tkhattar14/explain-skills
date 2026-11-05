@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "title": "Payment-link orders",
+  "one_line": "Added a CLI that makes an order first, then a Stripe payment link.",
+  "created": "2026-09-28",
+  "source": {"kind": "change", "ref": "PR 46 acme/shop-backend"},
+  "shape": "story",
+  "asked": ["Let the team take payment for an order by link"],
+  "parts": [
+    {"id": "cli", "name": "shop paylink", "what": "CLI command", "group": "backend", "status": "done", "src": "cli/paylink.py"},
+    {"id": "pay", "name": "Stripe", "what": "payment links", "group": "outside", "status": "auto", "src": "cli/paylink.py:88"},
+    {"id": "slack", "name": "Slack", "what": "unmatched payment posts", "group": "team", "status": "unverified", "src": "app/api/endpoints/payment_webhook.py"}
+  ],
+  "links": [
+    {"from": "cli", "to": "pay", "label": "create link", "src": "cli/paylink.py:88"},
+    {"from": "pay", "to": "slack", "label": "no matching order", "src": "app/api/endpoints/payment_webhook.py"}
+  ],
+  "steps": [
+    {"n": 1, "text": "Wrote the paylink command", "parts": ["cli"], "gate": false, "status": "verified", "src": "pytest: 14 passed"},
+    {"n": 2, "text": "Posts unmatched payments to Slack", "parts": ["slack"], "gate": false, "status": "unverified", "src": null},
+    {"n": 3, "text": "Run one live payment link", "parts": ["cli", "pay"], "gate": true, "status": "todo", "src": "PR body: smoke test pending"}
+  ],
+  "changes": [
+    {"what": "Add-ons stored on the order", "before": "no field", "after": "orders.addons", "file": "app/models/order.py", "src": "gh pr diff 46"}
+  ],
+  "numbers": [{"label": "Tests passed", "value": "14", "src": "pytest output in PR"}],
+  "state": {"verified": ["Unit tests pass"], "unverified": ["Slack post for unmatched payments"], "failed": []},
+  "needs_you": [{"text": "Run one small live payment link", "kind": "followup", "src": "PR body"}],
+  "risks": [{"text": "Unmatched captures need a person to place them", "severity": "medium", "src": "payment_webhook.py"}]
+}

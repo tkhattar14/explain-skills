@@ -1,0 +1,8 @@
+{
+  "title": "How the engine starts",
+  "subtitle": "A one-scene smoke test",
+  "scenes": [{"id": "s0", "type": "title", "chip": "Explainer", "lines": [
+    {"say": "This is the explain video engine."},
+    {"say": "If you can read this caption, the skeleton works."}
+  ]}]
+}

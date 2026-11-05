@@ -1,0 +1,5 @@
+{
+  "spec": {"title": "Sample", "scenes": [{"id": "s0", "type": "title", "chip": "Explainer", "lines": [{"say": "Sample."}]}]},
+  "timeline": {"fps": 30, "totalFrames": 90, "hasAudio": false,
+               "scenes": [{"id": "s0", "from": 0, "durationInFrames": 90, "leadFrames": 10, "audio": null, "lines": [{"start": 10}]}]}
+}
